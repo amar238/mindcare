@@ -3,8 +3,7 @@ Users
     FullName
     Email
     PasswordHash
-    Role (Patient, Psychologist, Admin)
-        `
+    Role (Patient, Psychologist, Admin)      
 
 Patients
     PatientID (Primary Key)
@@ -15,28 +14,29 @@ Patients
     PhoneNumber
     PrimaryPsychologistID (Foreign Key from Psychologists)
 
-Psychologists
+4fegvdt654                                      
     PsychologistID (Primary Key)
     UserID (Foreign Key from Users)
     Specialization
     LicenseNumber
     PhoneNumber
     OfficeAddress 
-
+6
 Appointments
-    AppointmentID (Primary Key)
+    Appointment5ID (Primary Key)
     PatientID (Foreign Key from Patients)
     PsychologistID (Foreign Key from Psychologists)
     AppointmentDate
     AppointmentTime
     Status (Scheduled, Completed, Missed)
+
 MedicalHistory
     HistoryID (Primary Key)
     PatientID (Foreign Key from Patients)
     Condition
-    Medication
-    Dosage
-    Notes
+        Dosage
+    otes
+
 PsychologicalAssessments
     AssessmentID (Primary Key)
     PatientID (Foreign Key from Patients)
@@ -44,6 +44,7 @@ PsychologicalAssessments
     TypeOfAssessment
     Results
     PsychologistID (Foreign Key from Psychologists)
+
 Treatments
     TreatmentID (Primary Key)
     PatientID (Foreign Key from Patients)
@@ -53,7 +54,6 @@ Treatments
     EndDate
     Notes
 
-
 Billing
     BillingID (Primary Key)
     PatientID (Foreign Key from Patients)
@@ -61,6 +61,7 @@ Billing
     Amount
     PaymentStatus (Paid, Unpaid)
     PaymentDate
+
 Consents(Not mandatory)
     ConsentID (Primary Key)
     PatientID (Foreign Key from Patients)
@@ -74,4 +75,13 @@ Prescrption online
 )
     Note
     Medicine
-    Medicine-Scedule
+    Medicine-Sceduleooio
+
+
+Steps taken down
+
+integrate frontend with node
+
+First phase
+    User Module
+        

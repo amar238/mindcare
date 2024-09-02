@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
@@ -6,8 +7,11 @@ const app = express();
 
 
 
-const port = 8000;
+const port =  process.env.PORT;
 const expressLayouts = require('express-ejs-layouts');
+
+// Database
+const db = require('./middlewares/mongoose');//db connection
 
 // Assets folder
 // app.use(express.static('./assets'));

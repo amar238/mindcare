@@ -14,7 +14,7 @@ Patients
     PhoneNumber
     PrimaryPsychologistID (Foreign Key from Psychologists)
 
-4fegvdt654                                      
+Psycologist                                  
     PsychologistID (Primary Key)
     UserID (Foreign Key from Users)
     Specialization

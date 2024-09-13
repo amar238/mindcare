@@ -11,12 +11,16 @@
 	<link rel="stylesheet" href="/css/bootstrap.min.css">
 	<link rel="stylesheet" href="/css/animations.css">
 	<link rel="stylesheet" href="/css/fonts.css">
+	<link rel="stylesheet" href="/css/mindcare.css">
 	<link rel="stylesheet" href="/css/main.css" class="color-switcher-link">
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
+	<script src="https://www.google.com/recaptcha/enterprise.js?render=6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0"></script>
+	<script src="https://www.google.com/recaptcha/api.js"></script>
 	<script src="js/vendor/modernizr-2.6.2.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </head>
+
 <body>
 	<div class="preloader">
 		<div class="preloader_image"></div>
@@ -26,10 +30,15 @@
 			<header class="page_header header_white table_section columns_padding_0 toggler-xs-right">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-md-2 col-sm-5 col-xs-8"><a href="./" class="logo"
-								data-mce-href="./">MindCare</a><!-- header toggler --><span
-								class="toggle_menu visible-xs"><span></span></span></div>
-						<div class="col-md-9 col-sm-2   text-center selected"><!-- main nav start -->
+						<div class="col-md-2 col-sm-5 col-xs-8">
+							<a href="./" class="logo" data-mce-href="./">MindCare</a>
+							<!-- header toggler -->
+							<span class="toggle_menu visible-xs visible-sm">
+								<span></span>
+							</span>
+						</div>
+						<div class="col-md-9 col-sm-2   text-center selected">
+							<!-- main nav start -->
 							<nav class="mainmenu_wrapper">
 								<ul class="mainmenu nav sf-menu">
 									<li><a href="/" data-mce-href="#">Home</a></li>
@@ -58,50 +67,52 @@
 				</div>
 			</header>
 			<%- body%>
-				<footer class="page_footer ls bg_image section_padding_top_50 section_padding_bottom_0">
-					<div class="container-fluid">
-						<div class="row" style="">
-							<div class="col-sm-4 to_animate">
-								<div class="teaser text-center">
-									<div class="teaser_icon highlight size_normal"><i class="rt-icon2-toolbox"></i>
-									</div>
-									<h3>About Company</h3>
-									<p>Know more about our company</p><a href="about.html"
-										class="theme_button wide_button color1">About Page</a>
+			<footer class="page_footer ls bg_image section_padding_top_50 section_padding_bottom_0">
+				<div class="container-fluid">
+					<div class="row" style="">
+						<div class="col-sm-4 to_animate">
+							<div class="teaser text-center">
+								<div class="teaser_icon highlight size_normal"><i class="rt-icon2-toolbox"></i>
 								</div>
+								<h3>About Company</h3>
+								<p>Know more about our company</p><a href="about.html"
+									class="theme_button wide_button color1">About Page</a>
 							</div>
-							<div class="col-sm-4 to_animate">
-								<div class="teaser text-center">
-									<div class="teaser_icon highlight size_normal"><i class="rt-icon2-pencil"></i></div>
-									<h3>Blog Posts</h3>
-									<p>Check out our recent news</p><a href="blog-right.html"
-										class="theme_button wide_button color1">Blog Page</a>
-								</div>
+						</div>
+						<div class="col-sm-4 to_animate">
+							<div class="teaser text-center">
+								<div class="teaser_icon highlight size_normal"><i class="rt-icon2-pencil"></i></div>
+								<h3>Blog Posts</h3>
+								<p>Check out our recent news</p><a href="blog-right.html"
+									class="theme_button wide_button color1">Blog Page</a>
 							</div>
-							<div class="col-sm-4 to_animate">
-								<div class="teaser text-center">
-									<div class="teaser_icon highlight size_normal"><i class="rt-icon2-camera"></i></div>
-									<h3>Our Gallery</h3>
-									<p>Check out our portfolio and photos</p><a href="gallery-regular.html"
-										class="theme_button wide_button color1">Gallery Page</a>
-								</div>
+						</div>
+						<div class="col-sm-4 to_animate">
+							<div class="teaser text-center">
+								<div class="teaser_icon highlight size_normal"><i class="rt-icon2-camera"></i></div>
+								<h3>Our Gallery</h3>
+								<p>Check out our portfolio and photos</p><a href="gallery-regular.html"
+									class="theme_button wide_button color1">Gallery Page</a>
 							</div>
 						</div>
 					</div>
-				</footer>
-				<section class="page_copyright section_padding_25 parallax ds"
-					style="position: relative; left: 0px; top: 0px;">
-					<div class="container">
-						<div class="row">
-							<div class="col-sm-12 text-center">
-								<p class="">© Copyright 2017 All Rights Reserved</p>
-							</div>
+				</div>
+			</footer>
+			<section class="page_copyright section_padding_25 parallax ds"
+				style="position: relative; left: 0px; top: 0px;">
+				<div class="container">
+					<div class="row">
+						<div class="col-sm-12 text-center">
+							<p class="">© Copyright 2017 All Rights Reserved</p>
 						</div>
 					</div>
-				</section>
+				</div>
+			</section>
 		</div><!-- eof #box_wrapper -->
 	</div><!-- eof #box_wrapper and #canvas -->
 	<script src="/js/compressed.js"></script>
 	<script src="/js/main.js"></script>
+	<%- script%>
 </body>
+
 </html>

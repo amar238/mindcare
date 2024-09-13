@@ -1,3 +1,5 @@
+
+<!-- <script src="/js/mindcare/patient_sign_up.js"></script> -->
 <div class="admin">
 	<div class="preloader">
 		<div class="preloader_image"></div>
@@ -16,13 +18,13 @@
 								</h4>
 								<hr class="bottommargin_30">
 								<div class="wrap-forms">
-									<form>
+									<form id="patient-sign-up-form" action="/authentication/patient-sign-up" method="post">
 										<div class="row">
 											<div class="col-sm-12">
 												<div class="form-group has-placeholder">
 													<label for="first-name">First Name</label>
 													<i class="grey fa fa-user"></i>
-													<input type="text" class="form-control" id="first-name" placeholder="First Name" required>
+													<input type="text" class="form-control" id="first-name" name="firstName" placeholder="First Name" >
 												</div>
 											</div>
 										</div>
@@ -31,7 +33,7 @@
 												<div class="form-group has-placeholder">
 													<label for="last-name">Last Name</label>
 													<i class="grey fa fa-user"></i>
-													<input type="text" class="form-control" id="last-name" placeholder="Last Name">
+													<input type="text" class="form-control" id="last-name" name="lastName" placeholder="Last Name" >
 												</div>
 											</div>
 										</div>
@@ -40,7 +42,7 @@
 												<div class="form-group has-placeholder">
 													<label for="login-email">Email address</label>
 													<i class="grey fa fa-envelope-o"></i>
-													<input type="email" class="form-control" id="login-email" placeholder="Email" required>
+													<input type="email" class="form-control" id="login-email" name="email" placeholder="Email" >
 												</div>
 											</div>
 										</div>
@@ -49,16 +51,49 @@
 												<div class="form-group has-placeholder">
 													<label for="phone">Phone</label>
 													<i class="grey fas fa-mobile-alt"></i>
-													<input type="tel" class="form-control" id="login-phone" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" placeholder="Mobile" required>
+													<input type="tel" class="form-control" id="login-phone" name="phone" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" placeholder="Mobile">
 												</div>
 											</div>
 										</div>
+									
+										
+									
+										<!-- Date of Birth -->
 										<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="date-of-birth">Date of Birth</label>
+													<i class="grey fa fa-calendar"></i>
+													<input type="date" class="form-control" id="date-of-birth" name="dateOfBirth" >
+												</div>
+											</div>
+										</div>
+									
+										<!-- Gender -->
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="gender">Gender</label>
+													<i class="grey fa fa-venus-mars"></i>
+													<select class="form-control" id="gender" name="gender" >
+														<option value="" disabled selected>Select Gender</option>
+														<option value="Male">Male</option>
+														<option value="Female">Female</option>
+														<option value="Other">Other</option>
+													</select>
+												</div>
+											</div>
+										</div>
+										<!-- set password section -->
+										<div class="row ">
+											<div class="col-sm-12" >
+												<h4 class="text-center" style="padding-top:15px ;">Set Password</h4>
+											</div>
 											<div class="col-sm-12">
 												<div class="form-group has-placeholder">
 													<label for="login-password">Password</label>
 													<i class="grey fa fa-pencil-square-o"></i>
-													<input type="password" class="form-control" id="login-password" placeholder="Password" required>
+													<input type="password" class="form-control" id="login-password" name="password" placeholder="Password">
 												</div>
 											</div>
 										</div>
@@ -67,27 +102,97 @@
 												<div class="form-group has-placeholder">
 													<label for="login-password2">Retype Password</label>
 													<i class="grey fa fa-pencil-square-o"></i>
-													<input type="password" class="form-control" id="login-password2" placeholder="Retype Password" required>
+													<input type="password" class="form-control" id="login-password2" placeholder="Retype Password" >
 												</div>
 											</div>
 										</div>
-										<!-- <div class="row">
+										<!-- Address Section -->
+										<div class="row">
 											<div class="col-sm-12">
-												<div class="checkbox">
-													<input type="checkbox" id="remember_me_checkbox">
-													<label for="remember_me_checkbox">Rememrber Me
-													</label>
+												<h4 class="text-center" style="padding-top:15px ;">Address</h4>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="street">Street</label>
+													<i class="grey fa fa-map-marker"></i>
+													<input type="text" class="form-control" id="street" name="address[street]" placeholder="Street">
 												</div>
 											</div>
-										</div> -->
-										<button type="submit" class="theme_button block_button color1">Create an account</button>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="city">City</label>
+													<i class="grey fa fa-building"></i>
+													<input type="text" class="form-control" id="city" name="address[city]" placeholder="City" >
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="state">State</label>
+													<i class="grey fa fa-map"></i>
+													<input type="text" class="form-control" id="state" name="address[state]" placeholder="State" >
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="zip-code">Zip Code</label>
+													<i class="grey fa fa-envelope"></i>
+													<input type="text" class="form-control" id="zip-code" name="address[zipCode]" placeholder="Zip Code" >
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="country">Country</label>
+													<i class="grey fa fa-globe"></i>
+													<input type="text" class="form-control" id="country" name="address[country]" placeholder="Country" >
+												</div>
+											</div>
+										</div>
+										<!-- Emergency Contact Section -->
+										<div class="row">
+											<div class="col-sm-12">
+												<h4 class="text-center" style="padding-top:15px ;">Emergency Contact</h4>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="emergency-name">Emergency Contact Name</label>
+													<i class="grey fa fa-user"></i>
+													<input type="text" class="form-control" id="emergency-name" name="emergencyContact[name]" placeholder="Name" >
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="emergency-relation">Relation</label>
+													<i class="grey fa fa-user"></i>
+													<input type="text" class="form-control" id="emergency-relation" name="emergencyContact[relation]" placeholder="Relation" >
+												</div>
+											</div>
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<label for="emergency-phone">Contact Number</label>
+													<i class="grey fas fa-mobile-alt"></i>
+													<input type="tel" class="form-control" id="emergency-phone" name="emergencyContact[contactNumber]" pattern="[0-9]{10}" inputmode="numeric" maxlength="10" placeholder="Contact Number">
+												</div>
+											</div>
+										</div>
+									
+										<!-- Gender -->
+										<div class="row">
+											<div class="col-sm-12">
+												<div class="form-group has-placeholder">
+													<input type="hidden" id="g-recaptcha" name="recaptcha">
+												</div>
+											</div>
+										</div>
+									
+										<button type="submit" id="submit-button" class="theme_button block_button color1 g-recaptcha" 
+										data-sitekey="6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0"  onclick="onClick(event)"
+										 data-action='submit'>Create an account</button>
 									</form>
 								</div>
 							</div>
 							<!-- .with_border -->
 							<p class="divider_20 text-center">
 								Already registered?
-								<a href="admin_signin.html">Log In</a>.
+								<a href="admin_signin.html">Log In</a>
 							</p>
 						</div>
 						<!-- .col-* -->
@@ -101,6 +206,12 @@
 	</div>
 	<!-- eof #canvas -->
 </div>
+
+
+
+
+
+
 <!-- template init -->
 <script src="/js/compressed.js"></script>
 <script src="/js/main.js"></script>
@@ -123,3 +234,5 @@
 
 <!-- dashboard init -->
 <script src="/js/admin.js"></script>
+<!-- recaptcha key -->
+

@@ -4,7 +4,9 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
 const app = express();
-
+const bodyParser = require("body-parser");
+app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 
 const port =  process.env.PORT;

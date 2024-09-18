@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const path = require("path");
 
 const patientSchama = new mongoose.Schema(
     {

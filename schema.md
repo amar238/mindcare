@@ -77,11 +77,11 @@ Prescrption online
     Medicine
     Medicine-Sceduleooio
 
+___________________________________________________________________________________________________
+****************************changes to be done before deploying***********************************
+* email id to send emails
+* recaptcha
+* strong password validation
+* fetching city, state, zipcode for address
 
-Steps taken down
 
-integrate frontend with node
-
-First phase
-    User Module
-        

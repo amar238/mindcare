@@ -19,3 +19,19 @@ module.exports.signUp = async(req,res)=>{
         return;
     }
 }
+
+module.exports.signIn = async(req,res)=>{
+    try {
+        return res.render('patient_sign_in')
+    } catch (error) {
+        return;
+    }
+}
+
+module.exports.forgotPassword = async(req,res)=>{
+    try {
+        return res.render('forgot_password');
+    } catch (error) {
+        
+    }
+}

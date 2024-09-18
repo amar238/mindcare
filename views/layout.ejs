@@ -37,20 +37,26 @@
 								<span></span>
 							</span>
 						</div>
-						<div class="col-md-9 col-sm-2   text-center selected">
+						<div class="col-md-9 col-sm-2 text-center ">
 							<!-- main nav start -->
 							<nav class="mainmenu_wrapper">
 								<ul class="mainmenu nav sf-menu">
 									<li><a href="/" data-mce-href="#">Home</a></li>
-									<li><a href="#" data-mce-href="#">About Us<br></a></li>
 									<li><a href="#" data-mce-href="#">Blogs<br></a></li>
 									<li><a href="#" data-mce-href="#">Testimonials</a></li>
+									<% if(locals.user){%>
 									<li><a href="#" data-mce-href="#">Profile<br></a></li>
-									<li><a href="/sign_up" data-mce-href="#">Sign In / Sign Up</a></li>
-									<li><a href="#" data-mce-href="#">Sign Out</a></li>
+									<%}%>
+									<% if(!locals.user){%>
+										<li><a href="/sign_in" data-mce-href="#">Sign In / Sign Up</a></li>
+										<% }else{ %>
+									<li><a href="/authentication/patient-sign-out" data-mce-href="#">Sign Out</a></li>
+									<%}%>
 								</ul>
-							</nav><!-- eof main nav --><span class="toggle_menu hidden-xs"></span>
+							</nav><!-- eof main nav -->
+							<span class="toggle_menu hidden-xs hidden-sm"></span>
 						</div>
+						<% if(locals.user){%>
 						<div class="col-md-4 col-sm-2" style="padding-left:10px ;">
 							<div class="page_social_icons divided_content">
 								<span><a class="social-icon soc-facebook" href="#" title="Facebook" data-mce-href="#">
@@ -63,6 +69,7 @@
 								</span>
 							</div>
 						</div>
+						<%}%>
 					</div>
 				</div>
 			</header>

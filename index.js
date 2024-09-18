@@ -3,6 +3,11 @@ require('dotenv').config();
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const session = require('express-session');
+const passport = require("passport");
+const passportLocal = require('./middlewares/passport-local-strategy');
+const MongoStore = require('connect-mongo');
+const Session_Secret = process.env.Session_Secret;
+
 const app = express();
 const bodyParser = require("body-parser");
 app.use(express.json());
@@ -26,6 +31,26 @@ app.set('layout extractScripts', true);
 
 app.set('view engine','ejs'); //use express view engine
 app.set('views',path.join(__dirname, 'views'));//default viws route
+
+// storing sessions
+app.use(session({
+    name : 'CSV',
+    secret : Session_Secret,
+    saveUninitialized: false,
+    resave: false,
+    cookie: {
+        maxAge : (1000 * 60 * 100)
+    },
+    store: new MongoStore({
+        mongoUrl: db._connectionString,
+        autoRemove: 'disabled'
+    },(err)=>{console.log(err)}
+    )
+}));
+//Authentication middleware
+app.use(passport.initialize());
+app.use(passport.session());
+app.use(passport.setAuthenticatedUser);
 
 
 // express router////////////////////////////////////////

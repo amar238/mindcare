@@ -21,7 +21,7 @@ const doctorSchama = new mongoose.Schema(
         },
         phone: {
             type: String,
-            require: false,
+            require: true,
             match: [/^\d{10}$/],
             unique: true,
             trim: true,
@@ -47,8 +47,9 @@ const doctorSchama = new mongoose.Schema(
             require: false,
             unique: true,
             trim: true,
+            require: true,
         },
-        verfied:{
+        verified:{
             type: Boolean,
             default: false,
         },

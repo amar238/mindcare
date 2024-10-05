@@ -2,6 +2,7 @@ const queue = require('../middlewares/bull');
 const signUpOTPWorker = require('../workers/signUpOTPWorker');
 const otps = new Map();
 const Patient = require('../models/patient');
+const Doctor = require('../models/doctor');
 
 // generate time bound otp for email
 function generateOTP(email) {
@@ -16,34 +17,44 @@ function generateOTP(email) {
   setTimeout(() => {
     otps.delete(email);
   }, otpValidityDuration);
+  console.log(otp);
   return otp;
 }
 
 // send generated otp for Sign Up process
 module.exports.SendSignUpOtp = async (req, res) => {
   try {
-    console.log("send sign up otp")
-    const { email } = req.body;
-    const existingPatient = await Patient.findOne({ email: email });
-    if (existingPatient) {
-      res.status(500).send("Patient already exist");
-    }
-    else {
-      const otp = generateOTP(email);
-      const OTP = {
-        otp: otp,
-        to: email
-      }
-      await queue.add(OTP,{ removeOnComplete: true });
+    // console.log("Sending sign up OTP");
+    const { email, license_num } = req.body;
+    // Check if the request is for a doctor or patient
+    let existingUser;
 
-      res.status(200).send('OTP sent successfully');
+    if (license_num) {
+      existingUser = await Doctor.findOne({ email });
+      if (existingUser) {
+        return res.status(409).send("Doctor already exists");
+      }
+    } else {
+      existingUser = await Patient.findOne({ email });
+      if (existingUser) {
+        return res.status(409).send("Patient already exists");
+      }
     }
+
+    // Generate OTP and send it
+    const otp = generateOTP(email);
+    const OTP = {
+      otp: otp,
+      to: email
+    };
+    await queue.add(OTP, { removeOnComplete: true });
+    res.status(200).send('OTP sent successfully');
 
   } catch (error) {
     console.log(error);
     res.status(500).send('Failed to send OTP');
   }
-}
+};
 
 // get otp from user and validate 
 module.exports.verifySignUpOtp = async (req, res) => {

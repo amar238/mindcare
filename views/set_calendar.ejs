@@ -1,0 +1,79 @@
+<h2 class="text-center">Set Available Time Slots for Tomorrow</h2>
+        <div class="card">
+            <div class="card-body">
+                <form id="timeSlotsForm">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="timeSlot" class="form-label">Select Time Slot</label>
+                                <input type="time" class="form-control" id="timeSlot" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="mb-3">
+                                <label for="duration" class="form-label">Duration (Minutes)</label>
+                                <input type="number" class="form-control" id="duration" placeholder="e.g. 30" required>
+                            </div>
+                        </div>
+                        <div class="col-md-4 d-flex align-items-end">
+                            <button type="button" id="addSlot" class="btn btn-success">Add Slot</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- List of Available Time Slots -->
+        <div class="card mt-4">
+            <div class="card-body">
+                <h4 class="card-title">Available Time Slots</h4>
+                <ul id="timeSlotsList" class="list-group"></ul>
+                <button type="button" class="btn btn-primary mt-3" id="submitSlots">Submit Time Slots</button>
+            </div>
+        </div>
+
+        <script>
+            const timeSlotsForm = document.getElementById('timeSlotsForm');
+            const timeSlotInput = document.getElementById('timeSlot');
+            const durationInput = document.getElementById('duration');
+            const timeSlotsList = document.getElementById('timeSlotsList');
+            const addSlotButton = document.getElementById('addSlot');
+            const submitSlotsButton = document.getElementById('submitSlots');
+    
+            const timeSlots = [];
+    
+            // Function to add a new time slot
+            addSlotButton.addEventListener('click', function () {
+                const timeSlot = timeSlotInput.value;
+                const duration = durationInput.value;
+    
+                if (timeSlot && duration) {
+                    // Add slot to the list
+                    const timeSlotObj = { time: timeSlot, duration: duration };
+                    timeSlots.push(timeSlotObj);
+    
+                    // Update the UI
+                    const listItem = document.createElement('li');
+                    listItem.classList.add('list-group-item');
+                    listItem.textContent = `Time: ${timeSlot}, Duration: ${duration} mins`;
+                    timeSlotsList.appendChild(listItem);
+    
+                    // Clear input fields
+                    timeSlotInput.value = '';
+                    durationInput.value = '';
+                } else {
+                    alert('Please fill out both time and duration.');
+                }
+            });
+    
+            // Handle form submission
+            submitSlotsButton.addEventListener('click', function () {
+                if (timeSlots.length > 0) {
+                    // You can send this data to your backend using an API call (e.g., fetch, axios)
+                    console.log('Time slots to submit:', timeSlots);
+                    alert('Time slots submitted successfully!');
+                } else {
+                    alert('Please add at least one time slot.');
+                }
+            });
+        </script>

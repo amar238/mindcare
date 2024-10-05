@@ -1,0 +1,173 @@
+<div class="container">
+    <h1>Doctor Availability</h1>
+    <form id="availabilityForm">
+        <input type="hidden" id="doctorId" value="<%= doctorId %>" />
+        <button type="button" class="btn btn-primary" id="generateSlots">Generate Weekly Slots</button>
+    </form>
+
+    <h2>Morning Slots (9 AM - 10 AM)</h2>
+    <div id="morningCalendar"></div>
+
+    <h2>Evening Slots (5 PM - 9 PM)</h2>
+    <div id="eveningCalendar"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const doctorId = document.getElementById('doctorId').value;
+
+        // Function to fetch events
+        function fetchEvents(successCallback, failureCallback) {
+            $.ajax({
+                url: `/availability/${doctorId}/availability`,
+                method: 'GET',
+                success: function (slots) {
+                    const events = slots.map(slot => ({
+                        id: slot._id,
+                        title: slot.type,
+                        start: slot.startTime,
+                        end: slot.endTime,
+                        backgroundColor: slot.isAvailable ? (slot.type === 'In-person' ? 'blue' : 'green') : 'red',
+                        borderColor: 'black',
+                        extendedProps: {
+                            isAvailable: slot.isAvailable,
+                        }
+                    }));
+                    successCallback(events);
+                },
+                error: function (error) {
+                    console.error('Error fetching availability slots:', error);
+                    failureCallback(error);
+                }
+            });
+        }
+
+        // Function to toggle holiday status
+        function toggleHoliday(event) {
+            const slotId = event.id;
+            const currentAvailability = event.extendedProps.isAvailable;
+
+            const newAvailability = !currentAvailability; // Toggle logic
+
+            $.ajax({
+                url: `/availability/toggle-holiday`,
+                method: 'PUT',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    doctorId: doctorId,
+                    slotId: slotId,
+                    isAvailable: newAvailability
+                }),
+                success: function (data) {
+                    alert(data.message);
+                    morningCalendar.refetchEvents(); // Refresh events after toggling
+                    eveningCalendar.refetchEvents(); // Refresh events after toggling
+                },
+                error: function (error) {
+                    console.error('Error toggling holiday:', error);
+                    alert('Failed to toggle holiday.');
+                }
+            });
+        }
+
+        // Initialize calendars
+        const morningCalendar = new FullCalendar.Calendar(document.getElementById('morningCalendar'), {
+            initialView: 'timeGridWeek',
+            allDaySlot: false,
+            slotDuration: "00:30:00",
+            height: "auto",
+            slotMinTime: '09:00:00',
+            slotMaxTime: '10:00:00',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridWeek,timeGridDay'
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                fetchEvents(events => {
+                    const filteredEvents = events.filter(event => moment(event.start).hour() >= 9 && moment(event.start).hour() < 10);
+                    successCallback(filteredEvents);
+                }, failureCallback);
+            },
+            eventClick: function (info) {
+                toggleHoliday(info.event); // Call toggle function on event click
+            },
+            dateClick: function (info) {
+                // Create start and end time for the slot clicked
+                const slotStart = moment(info.dateStr).set({ hour: 9, minute: 0 }).toDate();
+                const slotEnd = moment(info.dateStr).set({ hour: 10, minute: 0 }).toDate();
+
+                // Check if the clicked slot is marked as a holiday (red)
+                const isHoliday = info.jsEvent.target.style.backgroundColor === 'red';
+                if (isHoliday) {
+                    toggleHoliday({
+                        id: null, // Pass null as we won't have the slotId here
+                        extendedProps: { isAvailable: false } // Set to false as it's currently a holiday
+                    });
+                }
+            }
+        });
+
+        const eveningCalendar = new FullCalendar.Calendar(document.getElementById('eveningCalendar'), {
+            initialView: 'timeGridWeek',
+            allDaySlot: false,
+            slotDuration: "00:30:00",
+            height: "auto",
+            slotMinTime: '17:00:00',
+            slotMaxTime: '21:00:00',
+            headerToolbar: {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'timeGridWeek,timeGridDay'
+            },
+            events: function (fetchInfo, successCallback, failureCallback) {
+                fetchEvents(events => {
+                    const filteredEvents = events.filter(event => moment(event.start).hour() >= 17 && moment(event.start).hour() < 21);
+                    successCallback(filteredEvents);
+                }, failureCallback);
+            },
+            eventClick: function (info) {
+                toggleHoliday(info.event); // Call toggle function on event click
+            },
+            dateClick: function (info) {
+                const slotStart = moment(info.dateStr).set({ hour: 17, minute: 0 }).toDate();
+                const slotEnd = moment(info.dateStr).set({ hour: 21, minute: 0 }).toDate();
+
+                const isHoliday = info.jsEvent.target.style.backgroundColor === 'red';
+                if (isHoliday) {
+                    toggleHoliday({
+                        id: null,
+                        extendedProps: { isAvailable: false }
+                    });
+                }
+            }
+        });
+
+        // Render both calendars
+        morningCalendar.render();
+        eveningCalendar.render();
+
+        // Generate slots button functionality
+        document.getElementById('generateSlots').addEventListener('click', function () {
+            $.ajax({
+                url: `/availability/weekly`,
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ doctorId: doctorId }),
+                success: function (data) {
+                    alert(data.message);
+                    morningCalendar.refetchEvents();
+                    eveningCalendar.refetchEvents();
+                },
+                error: function (error) {
+                    console.error('Error generating weekly slots:', error);
+                    alert('Failed to generate weekly slots.');
+                }
+            });
+        });
+    });
+</script>

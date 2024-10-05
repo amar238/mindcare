@@ -1,0 +1,15 @@
+/* Hide the main menu by default on mobile */
+@media (max-width: 767px) {
+    .mainmenu_wrapper {
+        display: none;
+    }
+
+    .toggle_menu {
+        display: block;
+        cursor: pointer;
+    }
+
+    .mainmenu_wrapper.active {
+        display: block;
+    }
+}

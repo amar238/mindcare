@@ -34,7 +34,7 @@ app.set('views',path.join(__dirname, 'views'));//default viws route
 
 // storing sessions
 app.use(session({
-    name : 'CSV',
+    name : 'MondCare',
     secret : Session_Secret,
     saveUninitialized: false,
     resave: false,

@@ -1,0 +1,67 @@
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<h1>Book an Appointment</h1>
+        <form id="appointmentForm">
+            <div class="mb-3">
+                <label for="doctorId" class="form-label">Select Doctor</label>
+                <select id="doctorId" class="form-select" required>
+                    <!-- Populate doctors dynamically -->
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="sessionType" class="form-label">Select Session Type</label>
+                <select id="sessionType" class="form-select" required>
+                    <option value="Consultation">Consultation</option>
+                    <option value="Counselling">Counselling</option>
+                    <option value="Couple Therapy">Couple Therapy</option>
+                    <option value="Group Therapy">Group Therapy</option>
+                    <option value="Home Visit">Home Visit</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="date" class="form-label">Select Date</label>
+                <input type="date" id="date" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="timeSlot" class="form-label">Select Time Slot</label>
+                <select id="timeSlot" class="form-select" required>
+                    <!-- Populate time slots dynamically based on availability -->
+                </select>
+            </div>
+            <button type="button" class="btn btn-primary" id="bookAppointment">Book Appointment</button>
+        </form>
+
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('doctorId').addEventListener('change', async () => {
+            const doctorId = document.getElementById('doctorId').value;
+            const date = document.getElementById('date').value;
+
+            // Fetch available slots for the selected doctor and date
+            const response = await fetch(`/api/availability/${doctorId}/${date}`);
+            const slots = await response.json();
+
+            const timeSlotSelect = document.getElementById('timeSlot');
+            timeSlotSelect.innerHTML = '';
+            slots.forEach(slot => {
+                const option = document.createElement('option');
+                option.value = slot._id;
+                option.text = `${slot.time} - ${slot.sessionType}`;
+                timeSlotSelect.appendChild(option);
+            });
+        });
+
+        document.getElementById('bookAppointment').addEventListener('click', async () => {
+            const doctorId = document.getElementById('doctorId').value;
+            const slotId = document.getElementById('timeSlot').value;
+
+            const response = await fetch('/api/appointments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ patientId: 'patientIdHere', doctorId, slotId })
+            });
+
+            if (response.ok) {
+                alert('Appointment booked successfully!');
+            }
+        });
+    </script>

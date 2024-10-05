@@ -128,5 +128,5 @@ module.exports.createPatientSession = async(req,res,next)=>{
 // logout user
 module.exports.destroySession = (req,res)=>{
     req.logout(()=>{});
-    res.redirect('/sign_in');
+    res.redirect('/');
 }

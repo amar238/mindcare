@@ -1,0 +1,62 @@
+<div class="container">
+    <h1>Book Appointment</h1>
+    <form id="appointmentForm">
+        <input type="hidden" id="patientId" value="<%= patientId %>" />
+        <div class="mb-3">
+            <label for="doctorId" class="form-label">Select Doctor</label>
+            <select id="doctorId" class="form-select" required>
+                <option value="" disabled selected>Select a doctor</option>
+                <!-- Doctors should be populated dynamically -->
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="sessionType" class="form-label">Session Type</label>
+            <select id="sessionType" class="form-select" required>
+                <option value="" disabled selected>Select a session type</option>
+                <option value="Consultation">Consultation</option>
+                <option value="Counselling">Counselling</option>
+                <option value="Couple Therapy">Couple Therapy</option>
+                <option value="Group Therapy">Group Therapy</option>
+                <option value="Home Visit">Home Visit</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="date" class="form-label">Select Date</label>
+            <input type="date" id="date" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="timeSlot" class="form-label">Select Time Slot</label>
+            <select id="timeSlot" class="form-select" required>
+                <!-- Time slots will be populated dynamically -->
+            </select>
+        </div>
+        <button type="button" class="btn btn-primary" id="bookAppointment">Book Appointment</button>
+    </form>
+</div>
+
+<script>
+    document.getElementById('bookAppointment').addEventListener('click', async () => {
+        const patientId = document.getElementById('patientId').value;
+        const doctorId = document.getElementById('doctorId').value;
+        const sessionType = document.getElementById('sessionType').value;
+        const date = document.getElementById('date').value;
+        const timeSlot = document.getElementById('timeSlot').value;
+
+        try {
+            const response = await fetch('/api/appointments', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ patientId, doctorId, sessionType, date, timeSlot })
+            });
+
+            if (response.ok) {
+                alert('Appointment booked successfully!');
+            } else {
+                alert('Failed to book appointment.');
+            }
+        } catch (error) {
+            console.error('Error booking appointment:', error);
+            alert('Error booking appointment.');
+        }
+    });
+</script>

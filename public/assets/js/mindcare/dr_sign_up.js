@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
 
-    document.getElementById("patient-sign-up-form").addEventListener('submit', onClick);
+    document.getElementById("dr-sign-up-form").addEventListener('submit', onClick);
 });
 
 function onClick(e) {
@@ -15,8 +15,8 @@ function onClick(e) {
                 const lastName = document.getElementById("last-name").value;
                 const email = document.getElementById("login-email").value;
                 const phone = document.getElementById("login-phone").value;
-                const dob = document.getElementById("date-of-birth").value;
-                const gender = document.getElementById("gender").value;
+                const specialization= document.getElementById("specialization").value;
+                const license_num = document.getElementById("license-num").value;
                 const password = document.getElementById("login-password").value;
                 const confirm_password = document.getElementById("login-password2").value;
                 const street = document.getElementById("street").value;
@@ -24,10 +24,7 @@ function onClick(e) {
                 const state = document.getElementById("state").value;
                 const zip_code = document.getElementById("zip-code").value;
                 const country = document.getElementById("country").value;
-                const emergency_name = document.getElementById("emergency-name").value;
-                const relation = document.getElementById("emergency-relation").value;
-                const emergency_phone = document.getElementById("emergency-phone").value;
-
+                
                 // Client-side validation
                 if (!/^[a-zA-Z]{2,}$/.test(firstName)) {
                     showErrorAlert("First Name", "First Name should contain only alphabets and at least 2 characters!");
@@ -35,6 +32,10 @@ function onClick(e) {
                 }
                 if (!/^[a-zA-Z]{2,}$/.test(lastName)) {
                     showErrorAlert("Last Name", "Last Name should contain only alphabets and at least 2 characters!");
+                    return;
+                }
+                if (!/^[a-zA-Z ]{2,}$/.test(specialization)) {
+                    showErrorAlert("Specialization", "Speciazalization should contain only alphabets and at least 2 characters!");
                     return;
                 }
                 if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
@@ -45,12 +46,8 @@ function onClick(e) {
                     showErrorAlert("Phone Number", "Phone number should be 10 digits and should not start with 0!");
                     return;
                 }
-                if (dob === "") {
-                    showErrorAlert("Date of Birth", "Select Date Of Birth!");
-                    return;
-                }
-                if (gender === "") {
-                    showErrorAlert("Gender", "Select Gender!");
+                if (!/^[1-9][0-9]{9}$/.test(license_num)) {
+                    showErrorAlert("License Number", "License number should be 10 digits and should not start with 0!");
                     return;
                 }
                 
@@ -83,22 +80,7 @@ function onClick(e) {
                     showErrorAlert("Address", "Empty Country!");
                     return;
                 }
-                if (!/^[a-zA-Z]{2,}$/.test(emergency_name)) {
-                    showErrorAlert("Emergency Contact Details", "Name should contain only alphabets and at least 2 characters!");
-                    return;
-                }
-                if (!/^[a-zA-Z]{3,}$/.test(relation)) {
-                    showErrorAlert("Emergency Contact Details", "Relation should contain only alphabets and at least 3 characters!");
-                    return;
-                }
-                if (!/^[1-9][0-9]{9}$/.test(emergency_phone)) {
-                    showErrorAlert("Emergency Contact Details", "Phone number should be 10 digits and should not start with 0!");
-                    return;
-                }
-                if(phone === emergency_phone){
-                    showErrorAlert("Emergency Contact Details", "Personal and emergency contact details should not be same! ");
-                    return;
-                }
+                
 
                 // Prepare user data
                 const userData = {
@@ -106,8 +88,8 @@ function onClick(e) {
                     last_name: lastName,
                     email: email,
                     phone: phone,
-                    dob: dob,
-                    gender: gender,
+                    specialization:specialization,
+                    licenseNumber: license_num,
                     password: password,
                     confirm_password: confirm_password,
                     street: street,
@@ -115,9 +97,6 @@ function onClick(e) {
                     state: state,
                     zip_code: zip_code,
                     country: country,
-                    emergency_name: emergency_name,
-                    relation: relation,
-                    emergency_phone: emergency_phone, 
                     recaptchaToken: token,
                 };
 
@@ -127,11 +106,11 @@ function onClick(e) {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    body: JSON.stringify({ email }),
+                    body: JSON.stringify({ email, license_num }),
                 })
                     .then(response => response.text())
                     .then(async (data) => {
-                        
+                        console.log(data)
                         if(data.includes('already exists')){
                             showErrorAlert("Sign Up Failure", data);
                             return;
@@ -192,7 +171,7 @@ function verifyOTP(email, otp, userData) {
 }
 
 function signUp(userData) {
-    fetch("/authentication/patient-sign-up", {
+    fetch("/dr/create", {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -219,7 +198,7 @@ function showSuccessAlert(title, message) {
         text: message,
         icon: "success",
         showConfirmButton: false,
-        footer: '<a href="/sign_in" class="bg-green-500 text-white py-2 px-4 rounded">Sign In</a>',
+        footer: '<a href="/dr-sign-in" class="bg-green-500 text-white py-2 px-4 rounded">Sign In</a>',
     });
 }
 

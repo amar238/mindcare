@@ -1,62 +1,145 @@
-<div class="container">
-    <h1>Book Appointment</h1>
-    <form id="appointmentForm">
-        <input type="hidden" id="patientId" value="<%= patientId %>" />
-        <div class="mb-3">
-            <label for="doctorId" class="form-label">Select Doctor</label>
-            <select id="doctorId" class="form-select" required>
-                <option value="" disabled selected>Select a doctor</option>
-                <!-- Doctors should be populated dynamically -->
-            </select>
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Book an Appointment</h2>
+
+    <div class="card shadow-lg">
+        <div class="card-body p-4">
+            <form id="booking-form">
+
+                <!-- Select Doctor -->
+                <div class="form-group mb-3">
+                    <label for="doctor-select" class="form-label">Select Doctor:</label>
+                    <select id="doctor-select" class="form-select" required>
+                        <option value="">Choose a Doctor</option>
+                        <% doctors.forEach(doctor=> { %>
+                            <option value="<%= doctor._id %>">
+                                <%= doctor.firstName %>
+                                    <%= doctor.lastName %>
+                            </option>
+                            <% }); %>
+                    </select>
+                </div>
+
+                <!-- Therapy Type -->
+                <div class="form-group mb-3">
+                    <label for="therapy-select" class="form-label">Mode of Session:</label>
+                    <select id="therapy-select" class="form-select" required>
+                        <option value="">Choose Therapy Type</option>
+                        <option value="Tele-consultation">Tele-consultation</option>
+                        <option value="In-person">In-person</option>
+                    </select>
+                </div>
+
+                <!-- Session Type -->
+                <div class="form-group mb-3">
+                    <label for="session-select" class="form-label">Session Type:</label>
+                    <select id="session-select" class="form-select" required>
+                        <option value="">Choose Session Type</option>
+                        <option value="Consultation">Consultation</option>
+                        <option value="Counselling">Counselling</option>
+                        <option value="Couple Therapy">Couple Therapy</option>
+                        <option value="Group Therapy">Group Therapy</option>
+                    </select>
+                </div>
+
+                <!-- Available Slots Dropdown -->
+                <div class="form-group mb-4" id="slots-container" style="display:none;">
+                    <label for="slot-select" class="form-label">Available Slots:</label>
+                    <select id="slot-select" class="form-select" required>
+                        <!-- Slots will be dynamically injected here -->
+                    </select>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary btn-lg">Book Appointment</button>
+                </div>
+
+            </form>
         </div>
-        <div class="mb-3">
-            <label for="sessionType" class="form-label">Session Type</label>
-            <select id="sessionType" class="form-select" required>
-                <option value="" disabled selected>Select a session type</option>
-                <option value="Consultation">Consultation</option>
-                <option value="Counselling">Counselling</option>
-                <option value="Couple Therapy">Couple Therapy</option>
-                <option value="Group Therapy">Group Therapy</option>
-                <option value="Home Visit">Home Visit</option>
-            </select>
-        </div>
-        <div class="mb-3">
-            <label for="date" class="form-label">Select Date</label>
-            <input type="date" id="date" class="form-control" required>
-        </div>
-        <div class="mb-3">
-            <label for="timeSlot" class="form-label">Select Time Slot</label>
-            <select id="timeSlot" class="form-select" required>
-                <!-- Time slots will be populated dynamically -->
-            </select>
-        </div>
-        <button type="button" class="btn btn-primary" id="bookAppointment">Book Appointment</button>
-    </form>
+    </div>
 </div>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <script>
-    document.getElementById('bookAppointment').addEventListener('click', async () => {
-        const patientId = document.getElementById('patientId').value;
-        const doctorId = document.getElementById('doctorId').value;
-        const sessionType = document.getElementById('sessionType').value;
-        const date = document.getElementById('date').value;
-        const timeSlot = document.getElementById('timeSlot').value;
+    $(document).ready(function () {
+        const patientId = '<%= user._id %>';  // Get the logged-in patient's ID from locals
 
-        try {
-            const response = await fetch('/api/appointments', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ patientId, doctorId, sessionType, date, timeSlot })
-            });
+        // Fetch available slots when all options are selected
+        $('#doctor-select, #therapy-select, #session-select').on('change', function () {
+            const doctorId = $('#doctor-select').val();
+            const therapyType = $('#therapy-select').val();
+            const sessionType = $('#session-select').val();
 
-            if (response.ok) {
-                alert('Appointment booked successfully!');
-            } else {
-                alert('Failed to book appointment.');
+            if (doctorId && therapyType && sessionType) {
+                // Fetch available slots
+                $.ajax({
+                    url: `/appointment/availability/${doctorId}`,
+                    method: 'GET',
+                    data: {
+                        therapyType: therapyType,
+                        sessionType: sessionType
+                    },
+                    success: function (data) {
+                        const slotsContainer = $('#slots-container');
+                        const slotSelect = $('#slot-select');
+
+                        // Clear previous options
+                        slotSelect.empty();
+
+                        // Check if there are available slots
+                        if (data.length > 0) {
+                            slotsContainer.show();
+                            slotSelect.append('<option value="">Select Time Slot</option>');
+
+                            // Populate the slot dropdown with fetched data
+                            data.forEach(slot => {
+                                slotSelect.append(
+                                    `<option value="${slot.formattedSlot}" data-slot-id="${slot._id}">${slot.formattedSlot}</option>` // Use formattedSlot for display
+                                );
+                            });
+                        } else {
+                            slotsContainer.hide();
+                            alert('No available slots for the selected doctor, therapy, and session type.');
+                        }
+                    },
+                    error: function (err) {
+                        console.error('Error fetching slots:', err);
+                        alert('Failed to fetch available slots. Please try again.');
+                    }
+                });
             }
-        } catch (error) {
-            console.error('Error booking appointment:', error);
-            alert('Error booking appointment.');
-        }
+        });
+
+        // Handle form submission
+        $('#booking-form').on('submit', function (e) {
+            e.preventDefault();
+            const doctorId = $('#doctor-select').val();
+            const therapyType = $('#therapy-select').val();
+            const sessionType = $('#session-select').val();
+            const selectedSlot = $('#slot-select').val(); // Get selected slot value
+
+            if (doctorId && therapyType && sessionType && selectedSlot) {
+                // Send booking request with the selected slot
+                $.ajax({
+                    url: '/appointment/create',
+                    method: 'POST',
+                    data: {
+                        doctorId: doctorId,
+                        patientId: patientId,
+                        therapyType: therapyType,
+                        sessionType: sessionType,
+                        slotDetails: selectedSlot // Send the formattedSlot as a single string
+                    },
+                    success: function (response) {
+                        alert('Appointment booked successfully!');
+                    },
+                    error: function (err) {
+                        console.error('Error booking appointment:', err);
+                        alert('Failed to book appointment. Please try again.');
+                    }
+                });
+            }
+        });
     });
 </script>

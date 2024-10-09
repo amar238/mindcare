@@ -56,7 +56,7 @@ exports.getDoctorAvailabilityPage = async (req, res) => {
             startTime: slot.startTime.toISOString(),
             endTime: slot.endTime.toISOString()
         }));
-        console.log("returning")
+
 
         return res.render('doctorAvailability', {
             doctorId: doctor._id,
@@ -68,15 +68,9 @@ exports.getDoctorAvailabilityPage = async (req, res) => {
     }
 };
 
-// Helper function to generate slots for a week
-const generateWeeklySlots = async (doctorId) => {
-    const startTimeMorning = moment().set({ hour: 9, minute: 0 });
-    const endTimeMorning = moment().set({ hour: 10, minute: 0 });
-    const startTimeEveningTele = moment().set({ hour: 17, minute: 0 });
-    const endTimeEveningTele = moment().set({ hour: 18, minute: 0 });
-    const startTimeEveningInPerson = moment().set({ hour: 18, minute: 0 });
-    const endTimeEveningInPerson = moment().set({ hour: 21, minute: 0 });
 
+// Helper function to generate slots for a week (with half-hour slots)
+const generateWeeklySlots = async (doctorId) => {
     const daysOfWeek = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
     const today = moment(); // Current date
     const nextMonday = today.clone().day(1).startOf('day'); // Move to the next Monday
@@ -84,6 +78,10 @@ const generateWeeklySlots = async (doctorId) => {
     const promises = [];
 
     try {
+        // Delete existing slots for the week before generating new ones
+        await Availability.deleteMany({
+            doctor: doctorId,
+        });
         // Check if slots for the week already exist
         const existingSlots = await Availability.find({
             doctor: doctorId,
@@ -98,61 +96,94 @@ const generateWeeklySlots = async (doctorId) => {
             return; // Exit if slots already exist
         }
 
-        // If no slots exist, proceed with generation
+        // Generate half-hour slots for each day of the week
         for (let i = 0; i < daysOfWeek.length; i++) {
             const currentDay = nextMonday.clone().add(i, 'days');
 
-            // Morning Tele-consultation
-            promises.push(new Availability({
-                doctor: doctorId,
-                day: daysOfWeek[i],
-                date: currentDay.toDate(),
-                startTime: currentDay.clone().set({ hour: 9, minute: 0 }).toDate(),
-                endTime: currentDay.clone().set({ hour: 10, minute: 0 }).toDate(),
-                type: 'Tele-consultation',
-                isAvailable: true
-            }).save());
+            // Morning Tele-consultation (9:00 - 10:00)
+            let morningStartTime = currentDay.clone().set({ hour: 9, minute: 0 });
+            let morningEndTime = currentDay.clone().set({ hour: 10, minute: 0 });
 
-            // Evening Tele-consultation
-            promises.push(new Availability({
-                doctor: doctorId,
-                day: daysOfWeek[i],
-                date: currentDay.toDate(),
-                startTime: currentDay.clone().set({ hour: 17, minute: 0 }).toDate(),
-                endTime: currentDay.clone().set({ hour: 18, minute: 0 }).toDate(),
-                type: 'Tele-consultation',
-                isAvailable: true
-            }).save());
+            while (morningStartTime.isBefore(morningEndTime)) {
+                let slotEndTime = morningStartTime.clone().add(15, 'minutes'); // 30-minute slots
+                promises.push(new Availability({
+                    doctor: doctorId,
+                    day: daysOfWeek[i],
+                    date: currentDay.toDate(),
+                    startTime: morningStartTime.toDate(),
+                    endTime: slotEndTime.toDate(),
+                    type: 'Tele-consultation',
+                    isAvailable: true
+                }).save());
 
-            // Evening In-person (overlapping with tele-therapy)
-            promises.push(new Availability({
-                doctor: doctorId,
-                day: daysOfWeek[i],
-                date: currentDay.toDate(),
-                startTime: currentDay.clone().set({ hour: 18, minute: 0 }).toDate(),
-                endTime: currentDay.clone().set({ hour: 21, minute: 0 }).toDate(),
-                type: 'In-person',
-                isAvailable: true
-            }).save());
+                morningStartTime = slotEndTime; // Move to the next 30-minute slot
+            }
 
-            // Evening Tele-consultation (overlapping with in-person)
-            promises.push(new Availability({
-                doctor: doctorId,
-                day: daysOfWeek[i],
-                date: currentDay.toDate(),
-                startTime: currentDay.clone().set({ hour: 18, minute: 0 }).toDate(),
-                endTime: currentDay.clone().set({ hour: 21, minute: 0 }).toDate(),
-                type: 'Tele-consultation',
-                isAvailable: true
-            }).save());
+            // Evening Tele-consultation (17:00 - 18:00)
+            let eveningStartTimeTele = currentDay.clone().set({ hour: 17, minute: 0 });
+            let eveningEndTimeTele = currentDay.clone().set({ hour: 18, minute: 0 });
+
+            while (eveningStartTimeTele.isBefore(eveningEndTimeTele)) {
+                let slotEndTime = eveningStartTimeTele.clone().add(15, 'minutes'); // 30-minute slots
+                promises.push(new Availability({
+                    doctor: doctorId,
+                    day: daysOfWeek[i],
+                    date: currentDay.toDate(),
+                    startTime: eveningStartTimeTele.toDate(),
+                    endTime: slotEndTime.toDate(),
+                    type: 'Tele-consultation',
+                    isAvailable: true
+                }).save());
+
+                eveningStartTimeTele = slotEndTime; // Move to the next 30-minute slot
+            }
+
+            // Evening In-person (18:00 - 21:00)
+            let eveningStartTimeInPerson = currentDay.clone().set({ hour: 18, minute: 0 });
+            let eveningEndTimeInPerson = currentDay.clone().set({ hour: 21, minute: 0 });
+
+            while (eveningStartTimeInPerson.isBefore(eveningEndTimeInPerson)) {
+                let slotEndTime = eveningStartTimeInPerson.clone().add(15, 'minutes'); // 30-minute slots
+                promises.push(new Availability({
+                    doctor: doctorId,
+                    day: daysOfWeek[i],
+                    date: currentDay.toDate(),
+                    startTime: eveningStartTimeInPerson.toDate(),
+                    endTime: slotEndTime.toDate(),
+                    type: 'In-person',
+                    isAvailable: true
+                }).save());
+
+                eveningStartTimeInPerson = slotEndTime; // Move to the next 30-minute slot
+            }
+
+            // Evening Tele-consultation (overlapping) (18:00 - 21:00)
+            let eveningStartTimeTeleOverlap = currentDay.clone().set({ hour: 18, minute: 0 });
+            let eveningEndTimeTeleOverlap = currentDay.clone().set({ hour: 21, minute: 0 });
+
+            while (eveningStartTimeTeleOverlap.isBefore(eveningEndTimeTeleOverlap)) {
+                let slotEndTime = eveningStartTimeTeleOverlap.clone().add(15, 'minutes'); // 30-minute slots
+                promises.push(new Availability({
+                    doctor: doctorId,
+                    day: daysOfWeek[i],
+                    date: currentDay.toDate(),
+                    startTime: eveningStartTimeTeleOverlap.toDate(),
+                    endTime: slotEndTime.toDate(),
+                    type: 'Tele-consultation',
+                    isAvailable: true
+                }).save());
+
+                eveningStartTimeTeleOverlap = slotEndTime; // Move to the next 30-minute slot
+            }
         }
 
         await Promise.all(promises);
-        console.log('Slots generated successfully for the week');
+        console.log('Half-hour slots generated successfully for the week');
     } catch (error) {
         console.error('Error generating slots:', error);
     }
 };
+
 
 
 // Generate availability for the next week (Run this after a doctor signs up or every Sunday)
@@ -199,19 +230,23 @@ exports.createWeeklyAvailability = async (req, res) => {
 
 // Toggle Holiday Controller
 exports.toggleHoliday = async (req, res) => {
-    const { doctorId, slotId, isAvailable } = req.body;
+    const { doctorId, slotId, isAvailable, startTime, endTime } = req.body;
 
     try {
         if (slotId) {
             // If slotId is provided, toggle the specific slot
             await Availability.findByIdAndUpdate(slotId, { isAvailable });
-            const message = isAvailable ? 'Slot is now available for booking.' : 'Slot is marked as holiday.';
-            return res.status(200).json({ message });
-        } else {
-            // Here you would need logic to find the corresponding slot based on the time.
-            // This would typically involve looking up the start and end times.
-            return res.status(400).json({ message: 'Slot ID must be provided.' });
+        } else if (startTime && endTime) {
+            // If no slotId is provided, find the slot by startTime and endTime
+            await Availability.findOneAndUpdate(
+                { doctor: doctorId, startTime, endTime },
+                { isAvailable: true }
+            );
         }
+
+        res.status(200).json({
+            message: `Slot successfully ${isAvailable ? 'unmarked as holiday' : 'marked as holiday'}.`,
+        });
     } catch (error) {
         console.error('Error toggling holiday:', error);
         res.status(500).json({ message: 'Failed to toggle holiday.' });

@@ -76,13 +76,35 @@ Prescrption online
     Note
     Medicine
     Medicine-Sceduleooio
+________________________________________________________________________________
+Services we provide 
 
+Consultation: (tele-consultation and in person)
+1500 per 15 to 30min session 
+
+Counselling/ Therapy 
+(Tele-counselling/in person)
+2000 per 45min session 
+
+Couple therapy/marital therapy 
+(Tele-counselling/in person)
+3000 per 45mins for both
+
+Group Therapy 
+(In person)
+1000 per 30min session 
+
+Home visit 
+(Within pune)
+5000 per visit including traveling charges
 ___________________________________________________________________________________________________
 ****************************changes to be done before deploying***********************************
 * email id to send emails
 * recaptcha
 * strong password validation
 * fetching city, state, zipcode for address
+* mark holiday for doctor
+* calendar not working on iphone safari browser for signup
 
 
 ___________________________________________________________________________________________________

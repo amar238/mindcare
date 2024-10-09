@@ -9,10 +9,4 @@ router.post('/create-patient-session',authenticationController.verifyRecaptcha,p
 router.get('/patient-sign-out',authenticationController.destroySession);
 
 
-
-
-
-
-
-
 module.exports = router;

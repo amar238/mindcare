@@ -1,15 +1,15 @@
-<div class="container">
-    <h1>Doctor Availability</h1>
+<div class="container mt-5">
+    <h1 class="mb-4 text-center fs-1">Doctor Availability</h1>
     <form id="availabilityForm">
         <input type="hidden" id="doctorId" value="<%= doctorId %>" />
         <button type="button" class="btn btn-primary" id="generateSlots">Generate Weekly Slots</button>
     </form>
 
-    <h2>Morning Slots (9 AM - 10 AM)</h2>
-    <div id="morningCalendar"></div>
+    <h2 class="text-center">Morning Slots (9 AM - 10 AM)</h2>
+    <div id="morningCalendar" class="fs-2"></div>
 
-    <h2>Evening Slots (5 PM - 9 PM)</h2>
-    <div id="eveningCalendar"></div>
+    <h2 class="text-center mt-5">Evening Slots (5 PM - 9 PM)</h2>
+    <div id="eveningCalendar" class="fs-2"></div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js"></script>

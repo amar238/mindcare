@@ -30,7 +30,7 @@ function onClick(e) {
                     password: password,
                     recaptchaToken: token,
                 };
-
+   
                 // Send OTP
                 fetch("/authentication/create-patient-session", {
                     method: "POST",
@@ -41,6 +41,7 @@ function onClick(e) {
                 })
                 .then((response) => response.json())
                 .then((data) => {
+                  
                   if (data.success) {
                     showSuccessAlert("Signed In!", data.message);
                   } else {
@@ -70,7 +71,7 @@ function showSuccessAlert(title, message) {
       icon: "success",
       showConfirmButton: false,
       footer:
-        '<a href="/" class="bg-green-500 text-white py-2 px-4 rounded">Proceed to Home</a>',
+        '<a href="/" class="bg-green-500 text-black rounded">Proceed to Home</a>',
     });
   }
   

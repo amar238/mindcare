@@ -9,7 +9,9 @@ const MongoStore = require('connect-mongo');
 const Session_Secret = process.env.Session_Secret;
 
 const app = express();
+
 const bodyParser = require("body-parser");
+
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 

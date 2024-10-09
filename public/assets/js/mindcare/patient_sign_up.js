@@ -219,7 +219,7 @@ function showSuccessAlert(title, message) {
         text: message,
         icon: "success",
         showConfirmButton: false,
-        footer: '<a href="/sign_in" class="bg-green-500 text-white py-2 px-4 rounded">Sign In</a>',
+        footer: '<a href="/sign_in" class="bg-green-500 text-white rounded">Sign In</a>',
     });
 }
 

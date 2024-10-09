@@ -15,4 +15,5 @@ router.use('/authentication',require('./authentication_routes'));
 router.use('/dr',require('./dr_admin_routes'));
 router.use('/appointment',require('./appointment.routes'));
 router.use('/availability',require('./availability.routes'));
+router.use('/patient',require('./patient.routes'));
 module.exports = router;

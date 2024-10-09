@@ -1,12 +1,23 @@
-const express = require('express')
+const express = require('express');
 const router = express.Router();
-const appointmentController = require('../controllers/appointment_controller');
+const appointmentController = require('../controllers/appointmentController');
 const passport = require('passport');
 
-router.get('/get-appointment',passport.checkPatientAuthentication,appointmentController.getAppointment);
-router.get('/get-set-calendar',passport.checkDoctorAuthentication,appointmentController.getSetCalender);
+// Get booking page
+router.get('/book', appointmentController.getBookingPage);
 
-router.post('/', passport.checkPatientAuthentication, appointmentController.bookAppointment);
-router.put('/reschedule', passport.checkAuthentication, appointmentController.rescheduleAppointment);
-router.get('/book-appointment', passport.checkAuthentication, appointmentController.bookAppointmentPage );
+
+
+// Get availability by doctorId
+router.get('/availability/:doctorId', appointmentController.getAvailability);
+
+// Book an appointment
+router.post('/create', appointmentController.bookAppointment);
+
+// Reschedule an appointment
+router.put('/appointments/:appointmentId/reschedule', appointmentController.rescheduleAppointment);
+
+// Get patient appointments
+router.get('/appointments/:patientId', appointmentController.getPatientAppointments);
+
 module.exports = router;

@@ -120,10 +120,6 @@ exports.getAvailability = async (req, res) => {
     }
 };
 
-
-
-
-
 // Book an appointment
 exports.bookAppointment = async (req, res) => {
     const { patientId, doctorId, sessionType, therapyType:sessionMode, slotDetails } = req.body;
@@ -180,28 +176,9 @@ exports.bookAppointment = async (req, res) => {
     }
 };
 
-
-
 // Reschedule an appointment
 exports.rescheduleAppointment = async (req, res) => {
-    const { appointmentId } = req.params;
-    const { newDate, newTimeSlot } = req.body;
-
-    try {
-        const appointment = await Appointment.findById(appointmentId);
-        if (!appointment) {
-            return res.status(404).json({ message: 'Appointment not found' });
-        }
-
-        appointment.date = newDate;
-        appointment.timeSlot = newTimeSlot;
-        appointment.status = 'rescheduled';
-        await appointment.save();
-
-        res.status(200).json({ message: 'Appointment rescheduled successfully', appointment });
-    } catch (error) {
-        res.status(500).json({ message: 'Error rescheduling appointment', error });
-    }
+    
 };
 
 // Get all appointments for a patient
@@ -215,3 +192,4 @@ exports.getPatientAppointments = async (req, res) => {
         res.status(500).json({ message: 'Error fetching appointments', error });
     }
 };
+    

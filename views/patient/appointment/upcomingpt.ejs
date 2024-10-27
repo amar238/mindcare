@@ -1,0 +1,150 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Upcoming Appointments</h2>
+    <table class="table table-striped table-hover">
+        <thead class="table-light">
+            <tr>
+                <th scope="col" class="fs-5">Appointment</th>
+                <th scope="col" class="fs-5">Session Type</th>
+                <th scope="col" class="fs-5">Therapy Type</th>
+                <th scope="col" class="fs-5">Doctor</th>
+                <th scope="col" class="fs-5">Actions</th> <!-- Added actions column -->
+            </tr>
+        </thead>
+        <tbody id="appointmentsTableBody">
+            <% for (let apt of appointments) { %>
+                <tr>
+                    <td class="fs-5">
+                        <%= new Date(apt.date).toLocaleDateString() + ' - ' + apt.timeSlot %>
+                    </td>
+                    <td class="fs-5">
+                        <%= apt.sessionType %>
+                    </td>
+                    <td class="fs-5">
+                        <%= apt.sessionMode %>
+                    </td>
+                    <td class="fs-5">Dr.<%= apt.doctor.firstName %> <%= apt.doctor.lastName %></td>
+                    <td>
+                        <!-- Cancel button -->
+                        <button class="btn btn-danger btn-sm cancel-btn" data-id="<%= apt._id %>">Cancel</button>
+                        <!-- Reschedule button -->
+                        <button class="btn btn-warning btn-sm reschedule-btn" data-id="<%= apt._id %>"
+                            data-apt='<%= JSON.stringify(apt) %>'>Reschedule</button>
+                    </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal for Rescheduling -->
+<div class="modal" id="rescheduleModal" tabindex="-1" aria-labelledby="rescheduleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="rescheduleModalLabel">Reschedule Appointment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="reschedule-form">
+                    <input type="hidden" id="reschedule-appointment-id" />
+                    <div class="mb-3">
+                        <label for="new-slot" class="form-label">Select New Slot</label>
+                        <select id="new-slot" class="form-select" required>
+                            <option value="">Choose New Slot</option>
+                            <!-- New slots will be populated here -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="confirm-reschedule">Reschedule</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        // Cancel appointment
+        $('.cancel-btn').on('click', function () {
+            const appointmentId = $(this).data('id');
+
+            if (confirm('Are you sure you want to cancel this appointment?')) {
+                $.ajax({
+                    url: '/appointment/cancel',
+                    method: 'POST',
+                    data: { appointmentId },
+                    success: function (response) {
+                        alert(response.message);
+                        location.reload(); // Reload the page to see the updated appointments
+                    },
+                    error: function (err) {
+                        console.error('Error cancelling appointment:', err);
+                        alert('Failed to cancel appointment. Please try again.');
+                    }
+                });
+            }
+        });
+
+        // Open reschedule modal
+        $('.reschedule-btn').on('click', function () {
+            const appointmentId = $(this).data('id');
+            $('#reschedule-appointment-id').val(appointmentId);
+
+            // Fetch available slots for the selected appointment
+            const aptData = $(this).data('apt');
+            $.ajax({
+                url: `/appointment/availability/${aptData.doctor._id}`,
+                method: 'GET',
+                data: {
+                    therapyType: aptData.sessionMode,
+                    sessionType: aptData.sessionType
+                },
+                success: function (data) {
+                    const newSlotSelect = $('#new-slot');
+                    newSlotSelect.empty();
+                    newSlotSelect.append('<option value="">Select New Slot</option>');
+                    data.forEach(slot => {
+                        newSlotSelect.append(`<option value="${slot.formattedSlot}">${slot.formattedSlot}</option>`);
+                    });
+
+                    // Show the modal after fetching slots
+                    $('#rescheduleModal').modal('show');
+                },
+                error: function (err) {
+                    console.error('Error fetching available slots:', err);
+                    alert('Failed to fetch available slots. Please try again.');
+                }
+            });
+        });
+
+        // Handle reschedule confirmation
+        $('#confirm-reschedule').on('click', function () {
+            const appointmentId = $('#reschedule-appointment-id').val();
+            const newSlot = $('#new-slot').val();
+
+            if (newSlot) {
+                $.ajax({
+                    url: '/appointment/reschedule',
+                    method: 'POST',
+                    data: {
+                        appointmentId,
+                        newSlot
+                    },
+                    success: function (response) {
+                        alert(response.message);
+                        $('#rescheduleModal').modal('hide');
+                        location.reload(); // Reload to see updated appointments
+                    },
+                    error: function (err) {
+                        console.error('Error rescheduling appointment:', err);
+                        alert('Failed to reschedule appointment. Please try again.');
+                    }
+                });
+            } else {
+                alert('Please select a new slot.');
+            }
+        });
+    });
+</script>

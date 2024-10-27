@@ -3,107 +3,135 @@
 
 <head>
     <title>MindStory</title>
-    <meta charset="utf-8"><!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
+    <meta charset="utf-8">
+    <!--[if IE]> <meta http-equiv="X-UA-Compatible" content="IE=edge"><![endif]-->
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/main.css" id="color-switcher-link">
     <link rel="stylesheet" href="/css/animations.css">
     <link rel="stylesheet" href="/css/fonts.css">
     <%- style%>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="/js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <!--[if lt IE 9]> <script src="js/vendor/html5shiv.min.js"></script> <script src="js/vendor/respond.min.js"></script><![endif]-->
     <script src="https://www.google.com/recaptcha/api.js"></script>
-	<script src="https://www.google.com/recaptcha/enterprise.js?render=6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0"></script>
-	
-	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
 </head>
 
 <body>
     <div class="preloader">
         <div class="preloader_image"></div>
     </div>
-    <!--[if lt IE 9]> <div class="bg-danger text-center">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" class="highlight">upgrade your browser</a> to improve your experience.</div><![endif]--><!-- search modal -->
-    <!-- wrappers for visual page editor and boxed version of template -->
+    <!--[if lt IE 9]> <div class="bg-danger text-center">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/" class="highlight">upgrade your browser</a> to improve your experience.</div><![endif]-->
     <div id="canvas">
-    <div id="box_wrapper" class="">
-
-
-
-        <header class="page_header header_white table_section columns_padding_0 toggler-xs-right">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-md-3 col-sm-5 selected"><a href="./"
-                            class="logo">Psychologist</a><!-- header toggler --><span class="toggle_menu visible-xs"
-                            style=""><span></span></span></div>
-                    <div class="col-md-6 col-sm-2 text-center"><!-- main nav start -->
-                        <nav class="mainmenu_wrapper">
-                            <ul class="mainmenu nav sf-menu">
-                                <li><a href="/" data-mce-href="#">Home</a></li>
-									<li><a href="#" data-mce-href="#">Blogs<br></a></li>
-									<li><a href="#" data-mce-href="#">Testimonials</a></li>
-									<% if(locals.user && user.gender){%>
-									<li><a href="/patient/profile" data-mce-href="#">Profile<br></a></li>
-									<li class="nav-item dropdown">
-                                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownAppointments" role="button"
-                                          data-bs-toggle="dropdown" aria-expanded="false">
-                                          Appointments
-                                        </a>
-                                        <ul>
-                                          <li><a  href="#">Upcoming </a></li> <!-- Left padding added -->
-                                          <li><a  href="#">Past </a></li> <!-- Left padding added -->
-                                          <li><a href="/appointment/book">Book</a></li> <!-- Left padding added -->
+        <div id="box_wrapper" class="">
+            <header class="page_header header_white table_section columns_padding_0 toggler-xs-right">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-5 selected">
+                            <a href="/" class="logo" style="text-decoration:none;"><img
+                                    src="/images/img/cropped_image.png" class="img-fluid pe-4"
+                                    style="max-height: 70px;">MindStory</a>
+                            <!-- header toggler --><span class="toggle_menu visible-xs">
+                                <span></span>
+                            </span>
+                        </div>
+                        <div class="col-md-6 col-sm-2 text-center">
+                            <!-- main nav start -->
+                            <nav class="mainmenu_wrapper">
+                                <ul class="mainmenu sf-menu ps-4 list-unstyled">
+                                    <li><a href="#" class=" text-decoration-none" data-mce-href="#">Blogs<br></a></li>
+                                    <li><a href="#" class=" text-decoration-none" data-mce-href="#">Testimonials</a>
+                                    </li>
+                                    <% if(locals.user && user.gender){%>
+                                    <li><a class=" text-decoration-none" href="/patient/profile"
+                                            data-mce-href="#">Profile<br></a></li>
+                                    <li class="dropdown">
+                                        <a class="dropdown-toggle tex-decoration-none"
+                                            href="/appointment/upcomingpt/<%= user.id%>" id="navbarDropdownAppointments"
+                                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                            Appointments</a>
+                                        <ul class="list-unstyled">
+                                            <li><a class="text-decoration-none"
+                                                    href="/appointment/upcomingpt/<%= user.id%>">Upcoming </a></li>
+                                            <li><a class=" text-decoration-none" href="/appointment/book">Book</a></li>
                                         </ul>
-                                      </li>
+                                    </li>
                                     <%}%>
-									<% if(!locals.user){%>
-										<li><a href="/sign_in" data-mce-href="#">Sign In / Sign Up</a></li>
-										
-										<% }else{ %>
-									<li><a href="/authentication/patient-sign-out" data-mce-href="#">Sign Out</a></li>
-									<%}%>
-                            </ul>
-                        </nav><!-- eof main nav --><span class="toggle_menu hidden-xs"><span></span></span>
-                    </div>
-                    <div class="col-md-3 col-sm-5 text-right hidden-xs lightgreylinks">
-                        <div class="page_social_icons divided_content"><span><a class="social-icon soc-facebook"
-                                    href="#" title="Facebook"></a></span><span><a class="social-icon soc-twitter"
-                                    href="#" title="Twitter"></a></span><span><a class="social-icon soc-google" href="#"
-                                    title="Google"></a></span><span><a class="social-icon soc-linkedin" href="#"
-                                    title="LinkedIn"></a></span></div>
+                                            <%if(locals.user && user.verified && user.verified==true) {%>
+                                    <li class="nav-item  text-decoration-none">
+                                        <a class="text-decoration-none" href="#">Patients</a>
+                                    </li>
+
+                                    <!-- Appointments Dropdown -->
+                                    <li class="nav-item dropdown ">
+                                        <a class="dropdown-toggle text-decoration-none" href="#"
+                                            id="navbarDropdownAppointments" role="button" data-bs-toggle="dropdown"
+                                            aria-expanded="false">
+                                            Appointments
+                                        </a>
+                                        <ul class="list-unstyled fs-3" aria-labelledby="navbarDropdownAppointments">
+                                            <li><a class="ps-3 text-decoration-none"
+                                                    href="/appointment/upcomingdr/<%= user.id%>">Upcoming
+                                                </a></li> <!-- Left padding added -->
+                                            <li><a class="ps-3 text-decoration-none" href="#">Past </a></li>
+                                            <!-- Left padding added -->
+                                            <li><a class="ps-3 text-decoration-none"
+                                                    href="/availability/doctor-availability">Set
+                                                    Calendar</a></li> <!-- Left padding added -->
+                                        </ul>
+                                    </li>
+                                    <%}%>
+                                                    <% if(!locals.user){%>
+                                    <li><a href="/sign_in" text-decoration-none data-mce-href="#">Sign In / Sign Up</a>
+                                    </li>
+
+                                    <% }else{ %>
+                                    <li><a href="/authentication/patient-sign-out" data-mce-href="#"
+                                            class="text-decoration-none">Sign
+                                            Out</a></li>
+                                    <%}%>
+                                </ul>
+                            </nav><!-- eof main nav --><span class="toggle_menu hidden-xs"><span></span></span>
+                        </div>
+                        <div class="col-md-3 col-sm-5 text-right hidden-xs lightgreylinks">
+                            <div class="page_social_icons divided_content"><span><a class="social-icon soc-facebook"
+                                        href="#" title="Facebook"></a></span><span><a class="social-icon soc-twitter"
+                                        href="#" title="Twitter"></a></span><span><a class="social-icon soc-google"
+                                        href="#" title="Google"></a></span><span><a class="social-icon soc-linkedin"
+                                        href="#" title="LinkedIn"></a></span></div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </header>
-        <%if(locals.user && user.verified && user.verified ==true) {%>
-            <%- include('_dr_header')%>
-        <%}%>
-		<%- body%>
-        <section class="ds page_copyright table_section section_padding_25">
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-12 text-center">
-                        <p class=""><a href="/dr-sign-up" data-mce-href="#">©</a> Copyright 2017 All Rights Reserved</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-    </div><!-- eof #box_wrapper -->
-    </div><!-- eof #box_wrapper and #canvas -->
-    <%- script%>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+            </header>
 
-    <script src="/js/compressed.js"></script>
-    <script src="/js/main.js"></script>
-    
+            <%- body%>
+                                    <section class="ds page_copyright table_section section_padding_25">
+                                        <div class="container">
+                                            <div class="row">
+                                                <div class="col-sm-12 text-center">
+                                                    <p class=""><a href="/dr-sign-up" data-mce-href="#">©</a> Copyright
+                                                        2017 All Rights
+                                                        Reserved</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </section>
+                        </div><!-- eof #box_wrapper -->
+                    </div><!-- eof #box_wrapper and #canvas -->
+                    <%- script%>
 
-	
+                
+
+                    <script src="/js/compressed.js"></script>
+                    <script src="/js/main.js"></script>
+
 </body>
 
 </html>

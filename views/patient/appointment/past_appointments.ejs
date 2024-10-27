@@ -1,0 +1,26 @@
+<div class="container mt-5">
+    <h2 class="text-center mb-4">Past Appointments</h2>
+    <table class="table-striped table-hover">
+        <thead class="table-light fs-4">
+            <tr>
+                <th scope="col">Appointment</th>
+                <th scope="col">Session Type</th>
+                <th scope="col">Session Mode</th>
+                <th scope="col">Doctor</th>
+                <th scope="col">Prescription</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (let apt of appointments) { %>
+                <tr>
+                    
+                    <td class="fs-5"><%= new Date(apt.date).toLocaleDateString() + ' - ' + apt.timeSlot %></td>
+                    <td class="fs-5"><%= apt.sessionType %></td>
+                    <td class="fs-5"><%= apt.sessionMode %></td>
+                    <td class="fs-5">Dr.<%= apt.doctor.firstName%> <%= apt.doctor.lastName%></td>
+                    <!-- <td class="fs-5"><a href="http://"></a></td> -->
+                </tr>
+                <% } %>
+        </tbody>
+    </table>
+</div>

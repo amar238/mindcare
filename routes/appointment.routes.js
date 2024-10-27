@@ -5,8 +5,8 @@ const passport = require('passport');
 
 // Get booking page
 router.get('/book', appointmentController.getBookingPage);
-
-
+// doctors upcoming appointments
+router.get('/upcomingdr/:doctorId', appointmentController.getUpcomingAppointments);
 
 // Get availability by doctorId
 router.get('/availability/:doctorId', appointmentController.getAvailability);
@@ -18,6 +18,10 @@ router.post('/create', appointmentController.bookAppointment);
 router.put('/appointments/:appointmentId/reschedule', appointmentController.rescheduleAppointment);
 
 // Get patient appointments
-router.get('/appointments/:patientId', appointmentController.getPatientAppointments);
-
+router.get('/upcomingpt/:patientId', appointmentController.getPatientAppointments);
+// cancel appointment by patient
+router.post('/cancel', appointmentController.cancelAppointment);
+// Reschedule appointment by patient
+router.post('/reschedule', appointmentController.rescheduleAppointment);
+router.get('/pastpt/:patientId',appointmentController.getPatientPastAppointments);
 module.exports = router;

@@ -275,7 +275,6 @@ exports.getPatientAppointments = async (req, res) => {
 //only for doc
 exports.getPatientPastAppointments = async (req, res) => {
     const { patientId } = req.params;
-    const appointments = await Appointment.find({ patient: patientId }).populate('doctor');
     try {
         const appointments = await Appointment.find({ 
             patient: patientId,

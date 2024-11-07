@@ -42,7 +42,9 @@ function onClick(e) {
                 .then((response) => response.json())
                 .then((data) => {
                   if (data.success) {
-                    showSuccessAlert("Signed In!", data.message);
+                    fetch("/",{
+                      method:"GET",
+                    });
                   } else {
                     showErrorAlert("Sign In Failure", data.error);
                     throw new Error();

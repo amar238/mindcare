@@ -1,85 +1,92 @@
 document.addEventListener("DOMContentLoaded", function () {
-
-    document.getElementById("patient-sign-in-form").addEventListener('submit', onClick);
+  // Attach submit event listener to the patient sign-in form
+  document.getElementById("patient-sign-in-form").addEventListener('submit', onClick);
 });
 
 function onClick(e) {
+  // Prevent form submission
+  e.preventDefault();
 
-    e.preventDefault();
+  // Initialize reCAPTCHA when the form is submitted
+  grecaptcha.ready(function () {
+      grecaptcha.execute("6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0", { action: "submit" })
+          .then(function (token) {
+              // Gather email and password values from the form
+              const email = document.getElementById("login-email").value;
+              const password = document.getElementById("login-password").value;
 
-    grecaptcha.ready(function () {
-        grecaptcha.execute("6LdukTcqAAAAADjnv-dv4OZ4GoffcT8oMqnlNQJ0", { action: "submit" })
-            .then(function (token) {
-                // Gather data and validate it
-                const email = document.getElementById("login-email").value;
-                const password = document.getElementById("login-password").value;
+              // Email validation
+              if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                  showErrorAlert("Invalid email id", "Please check your email address.");
+                  return;
+              }
+          
+              // Password validation
+              if (password === "") {
+                  showErrorAlert("Empty Password", "Please enter a password.");
+                  return;
+              }
+             
+              // Prepare the user data to be sent to the backend
+              const userData = {
+                  email: email, 
+                  password: password,
+                  recaptchaToken: token, // Add the reCAPTCHA token to the data
+              };
 
-                if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-                    showErrorAlert("Invalid email id", "Check your email again!");
-                    return;
-                }
-            
-                if (password === "") {
-                    showErrorAlert("Empty Passwords", "Are you kidding?");
-                    return;
-                }
-               
-                // Prepare user data
-                const userData = {
-                    email: email, 
-                    password: password,
-                    recaptchaToken: token,
-                };
-   
-                // Send OTP
-                fetch("/authentication/create-patient-session", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(userData),
-                })
-                .then((response) => response.json())
-                .then((data) => {
-                  
+              // Make the POST request to create the session
+              fetch("/authentication/create-patient-session", {
+                  method: "POST",
+                  headers: {
+                      "Content-Type": "application/json",
+                  },
+                  body: JSON.stringify(userData), // Send the user data as JSON
+              })
+              .then((response) => response.json()) // Parse the JSON response
+              .then((data) => {
+                  // If the login is successful
                   if (data.success) {
-                    showSuccessAlert("Signed In!", data.message);
+                      // Optional: Redirect to home or another page after successful login
+                      showSuccessAlert("Success!", "You have been signed in successfully.");
                   } else {
-                    showErrorAlert("Sign In Failure", data.error);
-                    throw new Error();
+                      // If there’s an error with the login
+                      showErrorAlert("Sign In Failure", data.error || "An unexpected error occurred.");
+                      throw new Error("Sign-in failure");
                   }
-                })
-                .catch((error) => {
+              })
+              .catch((error) => {
                   showErrorAlert(
-                    "Sign In Failure",
-                    "Cheack your credientials and try again!"
+                      "Sign In Failure",
+                      "Check your credentials and try again!"
                   );
-                  throw new Error();
-                });
-            })
-            .catch(error => {
-                console.log(error);
-            });
-    });
+                  console.error(error); // Log error details
+              });
+          })
+          .catch(error => {
+              // Catch any error that occurs during reCAPTCHA verification
+              console.error("reCAPTCHA error:", error);
+              showErrorAlert("reCAPTCHA Error", "There was an issue verifying your reCAPTCHA. Please try again.");
+          });
+  });
 }
 
-
 function showSuccessAlert(title, message) {
-    Swal.fire({
+  // Display a success alert using SweetAlert2
+  Swal.fire({
       title: title,
       text: message,
       icon: "success",
       showConfirmButton: false,
-      footer:
-        '<a href="/" class="bg-green-500 text-black rounded">Proceed to Home</a>',
-    });
-  }
-  
-  function showErrorAlert(title, error) {
-    Swal.fire({
+      footer: '<a href="/" class="bg-green-500 text-black rounded">Proceed to Home</a>',
+  });
+}
+
+function showErrorAlert(title, error) {
+  // Display an error alert using SweetAlert2
+  Swal.fire({
       title: title,
       text: error,
       icon: "error",
       confirmButtonText: "OK",
-    });
-  }
+  });
+}

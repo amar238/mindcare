@@ -4,7 +4,7 @@ const appointmentController = require('../controllers/appointmentController');
 const passport = require('passport');
 
 // Get booking page
-router.get('/book', appointmentController.getBookingPage);
+router.get('/book', passport.checkPatientAuthentication,appointmentController.getBookingPage);
 // doctors upcoming appointments
 router.get('/upcomingdr/:doctorId', appointmentController.getUpcomingAppointments);
 

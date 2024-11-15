@@ -23,5 +23,5 @@ router.get('/upcomingpt/:patientId', appointmentController.getPatientAppointment
 router.post('/cancel', appointmentController.cancelAppointment);
 // Reschedule appointment by patient
 router.post('/reschedule', appointmentController.rescheduleAppointment);
-router.get('/pastpt/:patientId',appointmentController.getPatientPastAppointments);
+
 module.exports = router;

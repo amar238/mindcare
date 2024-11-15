@@ -22,7 +22,7 @@ function onClick(e) {
               }
           
               // Password validation
-              if (password === "") {
+              if (password === "") {    
                   showErrorAlert("Empty Password", "Please enter a password.");
                   return;
               }

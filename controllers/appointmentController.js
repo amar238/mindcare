@@ -255,18 +255,30 @@ exports.rescheduleAppointment = async (req, res) => {
     }
 };
 
+// // get all past appointments for doctor
+// exports.getPastDoctorAppointments = async(req,res)=>{
+//     const {doctorId} = req.params;
+//     try {
+//         const appointments = await Appointment.find({
+//             doctor: doctorId,
+//             date: {$lte}
+//         })
+//     } catch (error) {
+        
+//     }
+// }
 
 // Get all appointments for a patient
 exports.getPatientAppointments = async (req, res) => {
     const { patientId } = req.params;
-    const appointments = await Appointment.find({ patient: patientId }).populate('doctor');
+    // const appointments = await Appointment.find({ patient: patientId }).populate('doctor');
     try {
         const appointments = await Appointment.find({ 
             patient: patientId,
             date: {$gte:new Date()} 
         }).populate('doctor');
 
-        res.render('./patient/appointment/upcomingpt',{appointments})
+        res.render('./patient/appointment/upcomingpt',{appointments}) 
     } catch (error) {
         res.status(500).json({ message: 'Error fetching appointments', error });
     }

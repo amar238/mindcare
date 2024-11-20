@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const patientController = require('../controllers/patientController');
 
-// Routes for patient profile
-router.get('/profile', patientController.getProfile); // Get patient profile
-router.post('/profile/update', patientController.updateProfile); // Update patient profile
-
+router.post('/create',patientController.create); //store patient
+router.get('/add-patient',patientController.addPatient); //add patient page
+router.get('/records',patientController.getRecords);
+router.get('/view/:id',patientController.viewPatient);
 module.exports = router;

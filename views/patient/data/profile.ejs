@@ -1,0 +1,101 @@
+<div class="container mt-5 ">
+    <h1 class="mb-4 text-center">Patient Details</h1>
+    <div class="row fs-3">
+        <!-- Personal Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>Personal Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>First Name: </strong>
+                        <p><%= patient.firstName %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Last Name: </strong>
+                        <p><%= patient.lastName %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Phone: </strong>
+                        <p><%= patient.phone %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Date of Birth: </strong>
+                        <p><%= patient.dateOfBirth ? new Date(patient.dateOfBirth).toLocaleDateString() : 'N/A' %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Gender: </strong>
+                        <p><%= patient.gender %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-danger text-white">
+                    <h3>Emergency Contact</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Name: </strong>
+                        <p><%= patient.emergencyContact.name %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Relation: </strong>
+                        <p><%= patient.emergencyContact.relation %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Contact Number: </strong>
+                        <p><%= patient.emergencyContact.contactNumber %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Address Information -->
+    <div class="row fs-3">
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-secondary text-white">
+                    <h3>Address Information</h3>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Street: </strong>
+                        <p><%= patient.address.street %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>City: </strong>
+                        <p><%= patient.address.city %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>State: </strong>
+                        <p><%= patient.address.state %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Zip Code: </strong>
+                        <p><%= patient.address.zipCode %></p>
+                    </div>
+
+                    <div class="mb-3">
+                        <strong>Country: </strong>
+                        <p><%= patient.address.country %></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

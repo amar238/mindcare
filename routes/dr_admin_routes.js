@@ -8,5 +8,6 @@ const passport = require('passport');
 router.get('/admin_page',drAdminController.drLandingPage);
 
 router.post('/create',authenticationController.verifyRecaptcha,otpController.checkOtpVerified,drAdminController.create);
-router.post('/create-dr-session',authenticationController.verifyRecaptcha,passport.authenticate('local',{failureRedirect:"/dr-sign-in"}));
+router.post('/create-dr-session',authenticationController.verifyRecaptcha,passport.authenticate('local',{failureRedirect:"/dr-sign-in"}),drAdminController.createDrSession);
+
 module.exports = router;

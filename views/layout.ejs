@@ -53,55 +53,35 @@
                                     <li><a href="#" class=" text-decoration-none" data-mce-href="#">Blogs<br></a></li>
                                     <li><a href="#" class=" text-decoration-none" data-mce-href="#">Testimonials</a>
                                     </li>
-                                    <% if(locals.user && user.gender){%>
-                                        <li><a class=" text-decoration-none" href="/patient/profile"
-                                                data-mce-href="#">Profile<br></a></li>
-                                        <li class="dropdown">
-                                            <a class="dropdown-toggle tex-decoration-none"
-                                                href="/appointment/upcomingpt/<%= user.id%>"
-                                                id="navbarDropdownAppointments" role="button" data-bs-toggle="dropdown"
-                                                aria-expanded="false">
-                                                Appointments</a>
-                                            <ul class="list-unstyled">
-                                                <li><a class="text-decoration-none"
-                                                        href="/appointment/upcomingpt/<%= user.id%>">Upcoming </a></li>
-                                                <li><a class=" text-decoration-none" href="/appointment/book">Book</a>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <%}%>
                                             <%if(locals.user && user.verified && user.verified==true) {%>
-                                                <li class="nav-item  text-decoration-none">
-                                                    <a class="text-decoration-none" href="#">Patients</a>
-                                                </li>
+                                                
 
                                                 <!-- Appointments Dropdown -->
                                                 <li class="nav-item dropdown ">
                                                     <a class="dropdown-toggle text-decoration-none" href="#"
-                                                        id="navbarDropdownAppointments" role="button"
+                                                        id="navbarDropdownPatients" role="button"
                                                         data-bs-toggle="dropdown" aria-expanded="false">
-                                                        Appointments
+                                                        Patients
                                                     </a>
                                                     <ul class="list-unstyled fs-3"
-                                                        aria-labelledby="navbarDropdownAppointments">
+                                                        aria-labelledby="navbarDropdownPatients">
                                                         <li><a class="ps-3 text-decoration-none"
-                                                                href="/appointment/upcomingdr/<%= user.id%>">Upcoming
+                                                                href="/patient/add-patient">Add Patients
                                                             </a></li> <!-- Left padding added -->
-                                                        <li><a class="ps-3 text-decoration-none" href="#">Past </a></li>
+                                                        <!-- <li><a class="ps-3 text-decoration-none" href="#">Past </a></li> -->
                                                         <!-- Left padding added -->
                                                         <li><a class="ps-3 text-decoration-none"
-                                                                href="/availability/doctor-availability">Set
-                                                                Calendar</a></li> <!-- Left padding added -->
+                                                                href="/patient/records">Records</a></li> <!-- Left padding added -->
                                                     </ul>
                                                 </li>
                                                 <%}%>
                                                     <% if(!locals.user){%>
                                                         <li><a href="/sign_in" text-decoration-none
-                                                                data-mce-href="#">Sign In / Sign Up</a>
+                                                                data-mce-href="#"></a>
                                                         </li>
 
                                                         <% }else{ %>
-                                                            <li><a href="/authentication/patient-sign-out"
+                                                            <li><a href="/authentication/sign-out"
                                                                     data-mce-href="#" class="text-decoration-none">Sign
                                                                     Out</a></li>
                                                             <%}%>
@@ -168,15 +148,21 @@
         <!-- <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3783.2658794150057!2d73.8419732451439!3d18.516883384233406!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3bc2c1fdf4e72df9%3A0x75527ad42e2d86e6!2sDr.Rupali%20Shinde%20(MBBS%2CMD%2CDNB%20Psychiatry)%20-%20Mind%20Story%20Clinic%2C%20best%20female%20psychiatrist%20in%20pune!5e0!3m2!1sen!2sin!4v1731158167868!5m2!1sen!2sin" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe> -->
         <!-- Footer Bottom -->
         <div style="border-top: 1px solid #333; padding-top: 10px; margin-top: 20px;">
-            <p>Copyright © 2024 <a href="https://www.drrupalishinde.in"
-                    style="color: #fff; text-decoration: none;">drrupalishinde</a> | All rights reserved.</p>
+            <p>Copyright © 2024 
+                <% if(!locals.user){%>
+                    <a href="/dr-sign-in" class="text-reset text-decoration-none" data-mce-href="#">drrupalishinde</a>
+        
+                <% }else{ %>
+                    <a href="/authentication/sign-out"
+                            data-mce-href="#" class="text-reset text-decoration-none" >drrupalishinde</a>
+                    <%}%>| All rights reserved.</p>
         </div>
 
         <!-- Book Appointment Button -->
         <% if(locals.user && user.verified){%>
 
             <%}else{ %>
-                <a href="/appointment/book"
+                <a href="https://wa.me/918329520366?text=Hello,%20I%20would%20like%20to%20book%20an%20appointment."  target="_blank"
                     style="position: fixed; bottom: 80px; right: 5px; background-color: #25D366; color: #fff; padding: 10px 20px; border-radius: 25px; text-decoration: none; font-weight: bold;">
                     Book An Appointment
                 </a>

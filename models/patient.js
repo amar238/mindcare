@@ -15,13 +15,12 @@ const patientSchama = new mongoose.Schema(
         email: {
             type: String,
             require: true,
-            unique: true,
             lowercase: true,
             trim: true,
         },
         phone: {
             type: String,
-            require: false,
+            require: true,
             match: [/^\d{10}$/],
             unique: true,
             trim: true,
@@ -30,10 +29,6 @@ const patientSchama = new mongoose.Schema(
             name: { type: String, required: true, trim: true },
             relation: { type: String, required: true, trim: true },
             contactNumber: { type: String, required: true, trim: true }
-        },
-        password: {
-            type: String,
-            require: true,
         },
         dateOfBirth: {
             type: Date,

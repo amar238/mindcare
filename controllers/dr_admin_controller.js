@@ -62,14 +62,14 @@ module.exports.create = async (req, res) => {
 
 
 
-        // Validate address
-        if (!/^[a-zA-Z0-9\s,.'-]{2,}$/.test(street) ||
-            !/^[a-zA-Z\s]{2,}$/.test(city) ||
-            !/^[a-zA-Z\s]{2,}$/.test(state) ||
-            !/^[1-9]\d{5}$/.test(zipCode) ||
-            !/^[a-zA-Z\s]{2,}$/.test(country)) {
-            return res.status(400).json({ success: false, error: 'Invalid address details!' });
-        }
+        // // Validate address
+        // if (!/^[a-zA-Z0-9\s,.'-]{2,}$/.test(street) ||
+        //     !/^[a-zA-Z\s]{2,}$/.test(city) ||
+        //     !/^[a-zA-Z\s]{2,}$/.test(state) ||
+        //     !/^[1-9]\d{5}$/.test(zipCode) ||
+        //     !/^[a-zA-Z\s]{2,}$/.test(country)) {
+        //     return res.status(400).json({ success: false, error: 'Invalid address details!' });
+        // }
 
         // Encrypt password
         const salt = await bcrypt.genSalt(saltRounds);
@@ -102,5 +102,6 @@ module.exports.create = async (req, res) => {
 
 // after sign in user
 module.exports.createDrSession = async(req,res,next)=>{
+    console.log("sdds")
     return res.status(200).json({ success:true, message:'Dr login successfull!'});
 }

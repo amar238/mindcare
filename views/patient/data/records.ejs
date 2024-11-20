@@ -1,0 +1,31 @@
+<div class="content">
+    <div class="container mt-5">
+        <h2 class="text-center">Patient Information</h2>
+        <!-- Table responsive wrapper -->
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover fs-3">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Phone</th>
+                        <th>Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% patients.forEach((patient) => { %>
+                    <tr data-patient='<%= JSON.stringify(patient) %>'>
+                        <td contenteditable="false"><%= patient.firstName %> <%= patient.lastName %></td>
+                        <td contenteditable="false"><%= patient.phone %></td>
+                        <td>
+                            <!-- Buttons for actions -->
+                            <button class="btn btn-primary btn-sm view-btn fs-3" onclick="viewPatient(this)" data-patient-id="<%= patient._id %>">View</button>
+                        </td>
+                    </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="/js/mindcare/records.js"></script>

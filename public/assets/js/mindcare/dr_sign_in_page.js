@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
     document.getElementById("dr-sign-in-form").addEventListener('submit', onClick);
@@ -39,12 +40,13 @@ function onClick(e) {
                     },
                     body: JSON.stringify(userData),
                 })
-                .then((response) => response.json())
-                .then((data) => {
+                .then((response) => 
+                  {
+                      return response.json();
+                })
+                .then((data) => {  
                   if (data.success) {
-                    fetch("/",{
-                      method:"GET",
-                    });
+                    window.location.href = "/";
                   } else {
                     showErrorAlert("Sign In Failure", data.error);
                     throw new Error();
@@ -55,6 +57,7 @@ function onClick(e) {
                     "Sign In Failure",
                     "Cheack your credientials and try again!"
                   );
+                  console.log(error)
                   throw new Error();
                 });
             })

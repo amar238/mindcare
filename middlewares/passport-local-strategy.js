@@ -83,7 +83,7 @@ passport.checkDoctorAuthentication = (req, res, next) => {
         return next(); // If the user is authenticated and a doctor, proceed
     }
     // If not a doctor, redirect to a suitable page or show a 403 forbidden message
-    return res.status(403).send('Access denied. Only doctors can access this page.');
+    return res.redirect('/dr-sign-in');
 };
 
 passport.checkPatientAuthentication = (req, res, next) => {
